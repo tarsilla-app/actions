@@ -14,8 +14,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Publish Library to NPM
+    - id: npm
       if: ${{ inputs.deploy == 'npm' }}
+      name: Publish Library to NPM
       uses: tarsilla-app/actions/publish/base/npm@main
       with:
         token: ${{ inputs.npm-token }}
