@@ -31,3 +31,5 @@ runs:
         path: ${{ inputs.path }}
         install: ${{ inputs.install }}
         build: ${{ inputs.build }}
+    - name: Debug Outputs
+      run: echo "Page URL Storybook: ${{ steps.deploy.outputs.page_url }}"
