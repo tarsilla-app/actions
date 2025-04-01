@@ -3,6 +3,8 @@ description: Github action to execute OWASP dependency check as part of a github
 runs:
   using: composite
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
