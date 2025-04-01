@@ -1,6 +1,8 @@
 name: Deploy Storybook to Github Pages
 description: Github action to deploy storybook to github pages as part of a github workflow for NodeJS projects
 inputs:
+  deploy:
+    required: true
   path:
     required: false
     default: storybook-static
@@ -11,9 +13,9 @@ inputs:
     required: false
     default: npm run build-storybook
 outputs:
-  page_url:
-    description: The URL of the page
-    value: ${{ steps.deploy.outputs.page_url }}
+  pages_url:
+    description: The URL of the deployed Storybook in GitHub Pages
+    value: ${{ steps.github-pages.outputs.pages_url }}
 runs:
   using: composite
   steps:
@@ -24,13 +26,11 @@ runs:
       with:
         node-version: 22.x
         registry-url: https://registry.npmjs.org
-    - id: deploy
+    - id: github-pages
+      if: ${{ inputs.deploy == 'github-pages' }}
       name: Deploy Storybook to Github Pages
-      uses: tarsilla-app/actions/deploy/github-pages/base@main
+      uses: tarsilla-app/actions/deploy/base/github-pages@main
       with:
         path: ${{ inputs.path }}
         install: ${{ inputs.install }}
         build: ${{ inputs.build }}
-    - name: Debug Outputs
-      shell: bash
-      run: "echo 'Page URL Storybook: ${{ steps.deploy.outputs.page_url }}'"

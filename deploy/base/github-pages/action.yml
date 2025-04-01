@@ -8,8 +8,8 @@ inputs:
   build:
     required: true
 outputs:
-  page_url:
-    description: The URL of the page
+  pages_url:
+    description: The URL of the deployed GitHub Pages
     value: ${{ steps.deploy.outputs.page_url }}
 runs:
   #permissions:
@@ -33,6 +33,3 @@ runs:
       uses: actions/deploy-pages@v4
       with:
         token: ${{ github.token }}
-    - name: Debug Outputs
-      shell: bash
-      run: "echo 'Page URL Storybook Base: ${{ steps.deploy.outputs.page_url }}'"
