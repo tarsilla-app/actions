@@ -20,7 +20,7 @@ runs:
   steps:
     - name: Install
       shell: bash
-      run: ${{ inputs.install_command }}
+      run: ${{ inputs.install }}
     - name: Build
       shell: bash
       run: ${{ inputs.build }}
