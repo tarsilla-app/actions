@@ -1,7 +1,7 @@
 name: Deploy Storybook
 description: Github action to deploy storybook as part of a github workflow for NodeJS projects
 inputs:
-  deploy:
+  host:
     required: true
   path:
     required: false
@@ -27,7 +27,7 @@ runs:
         node-version: 22.x
         registry-url: https://registry.npmjs.org
     - id: github-pages
-      if: ${{ inputs.deploy == 'github-pages' }}
+      if: ${{ inputs.host == 'github-pages' }}
       name: Deploy Storybook to Github Pages
       uses: tarsilla-app/actions/deploy/base/github-pages@main
       with:
