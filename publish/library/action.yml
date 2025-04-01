@@ -1,0 +1,24 @@
+name: Publish Library
+description: Github action to publish library as part of a github workflow for NodeJS projects
+inputs:
+  deploy:
+    required: true
+  npm-token:
+    required: false
+  install:
+    required: false
+  build:
+    required: false
+  publish:
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Publish Library to NPM
+      if: ${{ inputs.deploy == 'npm' }}
+      uses: tarsilla-app/actions/publish/base/npm@main
+      with:
+        token: ${{ inputs.npm-token }}
+        path: ${{ inputs.path }}
+        install: ${{ inputs.install }}
+        build: ${{ inputs.build }}

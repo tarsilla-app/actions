@@ -6,7 +6,7 @@ inputs:
   build-mode:
     required: true  
   out:
-    required: true
+    required: false
     default: reports
 runs:
   #permissions:

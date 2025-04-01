@@ -1,5 +1,5 @@
-name: Deploy Storybook to Github Pages
-description: Github action to deploy storybook to github pages as part of a github workflow for NodeJS projects
+name: Deploy Storybook
+description: Github action to deploy storybook as part of a github workflow for NodeJS projects
 inputs:
   deploy:
     required: true

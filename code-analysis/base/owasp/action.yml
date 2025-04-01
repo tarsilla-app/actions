@@ -8,7 +8,7 @@ inputs:
   format:
     required: true
   out:
-    required: true
+    required: false
     default: reports
   suppression:
     required: false

@@ -3,6 +3,15 @@ description: Github action to publish to npm as part of a github workflow for No
 inputs:
   token:
     required: true
+  install:
+    required: false
+    default: npm ci
+  build:
+    required: false
+    default: npm run build
+  publish:
+    required: false
+    default: npx semantic-release 
 runs:
   #permissions:
   #  contents: write # to be set in workflow run
@@ -16,15 +25,15 @@ runs:
       with:
         node-version: 22.x
         registry-url: https://registry.npmjs.org
-    - name: Install dependencies
+    - name: Install
       shell: bash
-      run: npm ci
+      run: ${{ inputs.install }}
     - name: Build
       shell: bash
-      run: npm run build
+      run: ${{ inputs.build }}
     - name: Publish to NPM
       shell: bash
-      run: npx semantic-release
+      run: ${{ inputs.publish }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
         NPM_TOKEN: ${{ inputs.token }}
