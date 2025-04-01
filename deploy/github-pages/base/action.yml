@@ -34,4 +34,5 @@ runs:
       with:
         token: ${{ github.token }}
     - name: Debug Outputs
+      shell: bash
       run: "echo 'Page URL Storybook Base: ${{ steps.deploy.outputs.page_url }}'"
