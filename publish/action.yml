@@ -1,6 +1,6 @@
-name: Publish Library
+name: Publish
 inputs:
-  repository:
+  config:
     required: true
   npm-token:
     required: false
@@ -13,12 +13,12 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: npm
-      if: ${{ inputs.repository == 'npm' }}
-      name: Publish Library to NPM
-      uses: tarsilla-app/actions/publish/base/npm@main
+    - id: library
+      if: ${{ fromJson(inputs.config).type == 'library' }}
+      uses: tarsilla-app/actions/publish/library@main
       with:
-        token: ${{ inputs.npm-token }}
+        repository: ${{ fromJson(inputs.config).repository }}
+        npm-token: ${{ secrets.npm-token }}
         install: ${{ inputs.install }}
         build: ${{ inputs.build }}
         publish: ${{ inputs.publish }}

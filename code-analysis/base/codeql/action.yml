@@ -1,5 +1,4 @@
 name: CodeQL Analyze
-description: Github action to execute CodeQL analyze as part of a github workflow
 inputs:
   languages:
     required: true

@@ -1,5 +1,4 @@
 name: Snyk Code Test
-description: Github action to execute Snyk code test as part of a github workflow
 inputs:
   token:
     required: true

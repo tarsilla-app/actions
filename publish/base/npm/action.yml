@@ -1,5 +1,4 @@
 name: NPM Publish
-description: Github action to publish to npm as part of a github workflow for NodeJS projects
 inputs:
   token:
     required: true

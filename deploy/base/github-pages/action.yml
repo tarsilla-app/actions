@@ -1,15 +1,13 @@
 name: Deploy to Github Pages
-description: Github action to deploy to github pages as part of a github workflow for NodeJS projects
 inputs:
-  path:
-    required: true
   install:
     required: true
   build:
     required: true
+  path:
+    required: true
 outputs:
   pages_url:
-    description: The URL of the deployed GitHub Pages
     value: ${{ steps.deploy.outputs.page_url }}
 runs:
   #permissions:

@@ -1,20 +1,18 @@
 name: Deploy Storybook
-description: Github action to deploy storybook as part of a github workflow for NodeJS projects
 inputs:
   host:
     required: true
-  path:
-    required: false
-    default: storybook-static
   install:
     required: false
     default: npm ci
   build:
     required: false
     default: npm run build-storybook
+  path:
+    required: false
+    default: storybook-static
 outputs:
   pages_url:
-    description: The URL of the deployed Storybook in GitHub Pages
     value: ${{ steps.github-pages.outputs.pages_url }}
 runs:
   using: composite
@@ -31,6 +29,6 @@ runs:
       name: Deploy Storybook to Github Pages
       uses: tarsilla-app/actions/deploy/base/github-pages@main
       with:
-        path: ${{ inputs.path }}
         install: ${{ inputs.install }}
         build: ${{ inputs.build }}
+        path: ${{ inputs.path }}

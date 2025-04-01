@@ -1,5 +1,4 @@
 name: OWASP Dependency-Check
-description: Github action to execute OWASP dependency check as part of a github workflow
 inputs:
   project:
     required: true
