@@ -1,0 +1,41 @@
+name: Node Deploy
+inputs:
+  config:
+    required: true
+outputs:
+  github_pages_url:
+    value: ${{ steps.storybook.outputs.github_pages_url }}
+runs:
+  using: composite
+  steps:
+    - id: validate-config
+      run: |
+        node -e "
+        try {
+          JSON.parse(process.env.CONFIG);
+        } catch (e) {
+          console.error('Invalid JSON in inputs.config:', process.env.CONFIG);
+          console.error('Error:', e.message);
+          process.exit(1);
+        }"
+      shell: bash
+      env:
+        CONFIG: ${{ inputs.config }}
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        registry-url: https://registry.npmjs.org
+
+    - id: storybook
+      if: ${{ fromJson(inputs.config).storybook && fromJson(inputs.config).storybook.host }}
+      uses: tarsilla-app/actions/deploy/storybook@main
+      with:
+        host: ${{ fromJson(inputs.config).storybook.host }}
+        install: ${{ fromJson(inputs.config).storybook.install }}
+        build: ${{ fromJson(inputs.config).storybook.build }}
+        path: ${{ fromJson(inputs.config).storybook.path }}

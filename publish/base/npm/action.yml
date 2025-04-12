@@ -17,13 +17,6 @@ runs:
   #  id-token: write # to be set in workflow run
   using: composite
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 22.x
-        registry-url: https://registry.npmjs.org
     - name: Install
       shell: bash
       run: ${{ inputs.install }}

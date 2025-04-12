@@ -1,83 +1,32 @@
 # @tarsilla/actions
 
-This repository contains a collection of reusable GitHub Actions designed to streamline workflows for Next.js, React and TypeScript library. These actions cover code analysis, dependency checks, publishing and deployment.
+This repository contains a collection of reusable GitHub Actions designed to streamline workflows for Node.js projects. These actions focus on code analysis, deployment, and publishing, providing a robust foundation for maintaining high-quality and efficient workflows.
 
 ## Actions Overview
 
-### 1. **Snyk Test**
-- **Path**: [code-analysis/node/snyk/test/action.yml](code-analysis/node/snyk/test/action.yml)
-- **Description**: Executes Snyk tests to identify vulnerabilities in your project dependencies.
-- **Inputs**:
-  - `token` (required): Snyk API token.
-- **Usage**:
-```yaml
-  - name: Run Snyk Test
-    uses: tarsilla-app/actions/code-analysis/node/snyk/test@main
-    with:
-      token: ${{ secrets.SNYK_TOKEN }}
-```
+### Node Code Analysis
+The **Node Code Analysis** action ([code-analysis/node/action.yml](code-analysis/node/action.yml)) helps ensure code quality and security by integrating tools like Snyk, OWASP Dependency-Check, and CodeQL. It validates configurations, installs dependencies, and runs various analysis tools based on the provided configuration.
 
-### 2. **Snyk Code Test**
-- **Path**: [code-analysis/node/snyk/code-test/action.yml](code-analysis/node/snyk/code-test/action.yml)
-- **Description**: Executes Snyk code tests to identify vulnerabilities in your source code.
-- **Inputs**:
-  - `token` (required): Snyk API token.
-- **Usage**:
-```yaml
-  - name: Run Snyk Code Test
-    uses: tarsilla-app/actions/code-analysis/node/snyk/code-test@main
-    with:
-      token: ${{ secrets.SNYK_TOKEN }}
-```
+#### Features:
+- **Snyk Test**: Scans for vulnerabilities in dependencies. config = { snyk?: { types: ('test' | 'code-test')[], token: string } }
+- **OWASP Dependency-Check**: Identifies known vulnerabilities in project dependencies. config = { owasp?: boolean }
+- **Snyk Code Test**: Performs static code analysis for security issues. config = { snyk?: { types: ('test' | 'code-test')[], token: string } }
+- **CodeQL Analysis**: Provides advanced code scanning for JavaScript and TypeScript. config = { codeql?: boolean }
 
-### 3. **OWASP Dependency-Check**
-- **Path**: [code-analysis/node/owasp/action.yml](code-analysis/node/owasp/action.yml)
-- **Description**: Runs OWASP Dependency-Check to identify vulnerabilities in project dependencies.
-- **Inputs**:
-  - `suppression` (optional): indicates if using suppression (suppressions.xml in project root).
-- **Usage**:
-```yaml
-  - name: Run OWASP Dependency-Check
-    uses: tarsilla-app/actions/code-analysis/node/owasp@main
-    with:
-      suppression: true
-```
+### Node Deployment
+The **Node Deployment** action ([deploy/node/action.yml](deploy/node/action.yml)) simplifies the deployment process for Node.js projects. It supports deploying Storybook to GitHub Pages and validates configurations to ensure smooth deployment.
 
-### 4. **CodeQL Analysis**
-- **Path**: [code-analysis/node/codeql/action.yml](code-analysis/node/codeql/action.yml)
-- **Description**: Executes CodeQL analysis to identify security vulnerabilities and code quality issues.
-- **Usage**:
-```yaml
-  - name: Run CodeQL Analysis
-    uses: tarsilla-app/actions/code-analysis/node/codeql@main
-```
+#### Features:
+- **Storybook Deployment**: Deploys Storybook to GitHub Pages with customizable build and installation steps. config = { storybook?: { host: string; install?: string; build?: string; path? string } }
 
-### 5. **NPM Publish**
-- **Path**: [publish/npm/action.yml](publish/npm/action.yml)
-- **Description**: Publishes the project to NPM using semantic versioning.
-- **Inputs**:
-  - `token` (required): NPM authentication token.
-- **Usage**:
-```yaml
-  - name: Run Snyk Test
-    uses: tarsilla-app/actions/publish/npm@main
-    with:
-      token: ${{ secrets.NPM_TOKEN }}
-```
+### Node Publishing
+The **Node Publishing** action ([publish/node/action.yml](publish/node/action.yml)) automates the process of publishing Node.js packages to npm. It validates configurations, sets up the Node.js environment, and integrates with the NPM Publish action.
 
-### 6. **Deploy Storybook to GitHub Pages**
-- **Path**: [deploy/github-pages/storybook/action.yml](deploy/github-pages/storybook/action.yml)
-- **Description**: Deploys Storybook to GitHub Pages.
-- **Inputs**:
-  - `path` (optional): Path to the Storybook static files.
-  - `install` (optional): Command to install dependencies.
-  - `build` (optional): Command to build Storybook.
-- **Usage**:
-```yaml
-  - name: Run Snyk Test
-    uses: tarsilla-app/actions/deploy/github-pages/storybook@main
-    with:
-      path: storybook-static
-      install: npm ci
-      build: npm run build-storybook
-```
+#### Features:
+- **NPM Publish**: Publishes packages to npm with customizable build and installation steps. config = { npm?: { token: string; install?: string; build?: string; publish? string } }
+
+## Usage
+Each action is designed to be reusable and configurable. Refer to the respective `action.yml` files for detailed input and output specifications.
+
+## License
+This repository is licensed under the [MIT License](LICENSE).

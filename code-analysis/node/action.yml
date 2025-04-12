@@ -1,0 +1,64 @@
+name: Node Code Analysis
+inputs:
+  config:
+    required: true
+runs:
+  using: composite
+  steps:
+    - id: validate-config
+      run: |
+        node -e "
+        try {
+          JSON.parse(process.env.CONFIG);
+        } catch (e) {
+          console.error('Invalid JSON in inputs.config:', process.env.CONFIG);
+          console.error('Error:', e.message);
+          process.exit(1);
+        }"
+      shell: bash
+      env:
+        CONFIG: ${{ inputs.config }}
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        registry-url: https://registry.npmjs.org
+    
+    - name: Install dependencies
+      run: npm ci
+      shell: bash
+
+    - id: snyk-test
+      if: ${{ fromJson(inputs.config).snyk && fromJson(inputs.config).snyk.token && fromJson(inputs.config).snyk.types && contains(fromJson(inputs.config).snyk.types, 'test') }}
+      uses: tarsilla-app/actions/code-analysis/base/snyk/test/node@main
+      with:
+        project: ${{ github.repository }}
+        token: ${{ fromJson(inputs.config).snyk.token }}
+
+    - id: owasp
+      if: ${{ fromJson(inputs.config).owasp }}
+      uses:  tarsilla-app/actions/code-analysis/base/owasp@main
+      with:
+        project: ${{ github.repository }}
+        path: .
+        format: HTML
+        out: reports
+        suppression: ${{ fromJson(inputs.config).owasp.suppression || false }}
+
+    - id: snyk-code-test
+      if: ${{ fromJson(inputs.config).snyk && fromJson(inputs.config).snyk.token && fromJson(inputs.config).snyk.types && contains(fromJson(inputs.config).snyk.types, 'code-test') }}
+      uses: tarsilla-app/actions/code-analysis/base/snyk/code-test/node@main
+      with:
+        token: ${{ fromJson(inputs.config).snyk.token }}
+
+    - id: codeql
+      if: ${{ fromJson(inputs.config).codeql }}
+      uses: tarsilla-app/actions/code-analysis/base/codeql@main
+      with:
+        languages: javascript-typescript
+        build-mode: none
+        out: reports

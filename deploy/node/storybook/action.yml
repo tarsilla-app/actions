@@ -12,18 +12,11 @@ inputs:
     required: false
     default: storybook-static
 outputs:
-  pages_url:
-    value: ${{ steps.github-pages.outputs.pages_url }}
+  github_pages_url:
+    value: ${{ steps.github-pages.outputs.github_pages_url }}
 runs:
   using: composite
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 22.x
-        registry-url: https://registry.npmjs.org
     - id: github-pages
       if: ${{ inputs.host == 'github-pages' }}
       name: Deploy Storybook to Github Pages

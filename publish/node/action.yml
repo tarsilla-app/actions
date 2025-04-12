@@ -1,0 +1,38 @@
+name: Node Publish
+inputs:
+  config:
+    required: true
+runs:
+  using: composite
+  steps:
+    - id: validate-config
+      run: |
+        node -e "
+        try {
+          JSON.parse(process.env.CONFIG);
+        } catch (e) {
+          console.error('Invalid JSON in inputs.config:', process.env.CONFIG);
+          console.error('Error:', e.message);
+          process.exit(1);
+        }"
+      shell: bash
+      env:
+        CONFIG: ${{ inputs.config }}
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        registry-url: https://registry.npmjs.org
+
+    - id: npm
+      if: ${{ fromJson(inputs.config).npm && fromJson(inputs.config).npm.token }}
+      uses: tarsilla-app/actions/publish/base/npm@main
+      with:
+        token: ${{ fromJson(inputs.config).npm.token }}
+        install: ${{ fromJson(inputs.config).npm.install }}
+        build: ${{ fromJson(inputs.config).npm.build }}
+        publish: ${{ fromJson(inputs.config).npm.publish }}
