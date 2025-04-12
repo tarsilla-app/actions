@@ -1,4 +1,4 @@
-name: Node Code Analysis
+name: NodeJS Code Analysis
 inputs:
   config:
     required: true

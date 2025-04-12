@@ -1,4 +1,4 @@
-name: Node Deploy
+name: NodeJS Deploy
 inputs:
   config:
     required: true
