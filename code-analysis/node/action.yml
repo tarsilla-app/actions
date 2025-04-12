@@ -2,6 +2,9 @@ name: Node Code Analysis
 inputs:
   config:
     required: true
+  node-version:
+    required: false
+    default: '22.x'
 runs:
   using: composite
   steps:
@@ -25,7 +28,7 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 22.x
+        node-version: ${{ inputs.node-version }}
         registry-url: https://registry.npmjs.org
     
     - name: Install dependencies
@@ -41,13 +44,13 @@ runs:
 
     - id: owasp
       if: ${{ fromJson(inputs.config).owasp }}
-      uses:  tarsilla-app/actions/code-analysis/base/owasp@main
+      uses: tarsilla-app/actions/code-analysis/base/owasp@main
       with:
         project: ${{ github.repository }}
         path: .
         format: HTML
         out: reports
-        suppression: ${{ fromJson(inputs.config).owasp.suppression || false }}
+        suppression: ${{ fromJson(inputs.config).owasp.suppression || 'false' }}
 
     - id: snyk-code-test
       if: ${{ fromJson(inputs.config).snyk && fromJson(inputs.config).snyk.token && fromJson(inputs.config).snyk.types && contains(fromJson(inputs.config).snyk.types, 'code-test') }}

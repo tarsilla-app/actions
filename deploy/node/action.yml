@@ -2,6 +2,9 @@ name: Node Deploy
 inputs:
   config:
     required: true
+  node-version:
+    required: false
+    default: '22.x'
 outputs:
   github_pages_url:
     value: ${{ steps.storybook.outputs.github_pages_url }}
@@ -28,7 +31,7 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 22.x
+        node-version: ${{ inputs.node-version }}
         registry-url: https://registry.npmjs.org
 
     - id: storybook
