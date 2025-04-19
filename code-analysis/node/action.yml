@@ -38,6 +38,7 @@ runs:
       shell: bash
 
     - id: snyk-test
+      name: Node.js snyk-test
       if: ${{ fromJson(inputs.config).snyk && inputs.snyk-token && contains(fromJson(inputs.config).snyk, 'test') }}
       uses: tarsilla-app/actions/code-analysis/base/snyk/test/node@main
       with:
@@ -45,6 +46,7 @@ runs:
         token: ${{ inputs.snyk-token }}
 
     - id: owasp
+      name: Node.js owasp
       if: ${{ fromJson(inputs.config).owasp }}
       uses: tarsilla-app/actions/code-analysis/base/owasp@main
       with:
@@ -55,12 +57,14 @@ runs:
         suppression: ${{ fromJson(inputs.config).owasp.suppression || 'false' }}
 
     - id: snyk-code-test
+      name: Node.js snyk-code-test
       if: ${{ fromJson(inputs.config).snyk && inputs.snyk-token && contains(fromJson(inputs.config).snyk, 'code-test') }}
       uses: tarsilla-app/actions/code-analysis/base/snyk/code-test/node@main
       with:
         token: ${{ inputs.snyk-token }}
 
     - id: codeql
+      name: Node.js codeql
       if: ${{ fromJson(inputs.config).codeql }}
       uses: tarsilla-app/actions/code-analysis/base/codeql@main
       with:
