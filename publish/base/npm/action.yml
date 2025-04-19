@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Echo
       run: |
-        echo process.env.INSTALL, process.env.BUILD, process.env.PUBLISH
+        echo ${process.env.INSTALL}, ${process.env.BUILD}, ${process.env.PUBLISH}
       shell: bash
       env:
         INSTALL: ${{ inputs.install }}

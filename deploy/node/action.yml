@@ -39,6 +39,6 @@ runs:
       uses: tarsilla-app/actions/deploy/node/storybook@main
       with:
         host: ${{ fromJson(inputs.config).storybook.host }}
-        install: ${{ fromJson(inputs.config).storybook.install }}
-        build: ${{ fromJson(inputs.config).storybook.build }}
-        path: ${{ fromJson(inputs.config).storybook.path }}
+        install: ${{ fromJson(inputs.config).storybook.install || 'npm ci' }}
+        build: ${{ fromJson(inputs.config).storybook.build || 'npm run build-storybook' }}
+        path: ${{ fromJson(inputs.config).storybook.path || 'storybook-static' }}

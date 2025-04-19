@@ -38,6 +38,6 @@ runs:
       uses: tarsilla-app/actions/publish/base/npm@main
       with:
         token: ${{ inputs.npm-token }}
-        install: ${{ fromJson(inputs.config).npm.install }}
-        build: ${{ fromJson(inputs.config).npm.build }}
-        publish: ${{ fromJson(inputs.config).npm.publish }}
+        install: ${{ fromJson(inputs.config).npm.install || 'npm ci' }}
+        build: ${{ fromJson(inputs.config).npm.build || 'npm run build' }}
+        publish: ${{ fromJson(inputs.config).npm.publish || 'npx semantic-release' }}
