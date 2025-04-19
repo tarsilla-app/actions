@@ -1,5 +1,4 @@
 name: NodeJS CI/CD
-description: Github workflow to execute ci as part of a github workflow for NodeJS projects
 on:
   workflow_call:
     inputs:
