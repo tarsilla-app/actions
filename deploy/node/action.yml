@@ -36,7 +36,7 @@ runs:
 
     - id: storybook
       if: ${{ fromJson(inputs.config).storybook && fromJson(inputs.config).storybook.host }}
-      uses: tarsilla-app/actions/deploy/storybook@main
+      uses: tarsilla-app/actions/deploy/node/storybook@main
       with:
         host: ${{ fromJson(inputs.config).storybook.host }}
         install: ${{ fromJson(inputs.config).storybook.install }}
