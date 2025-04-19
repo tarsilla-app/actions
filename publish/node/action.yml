@@ -5,6 +5,8 @@ inputs:
   node-version:
     required: false
     default: '22.x'
+  npm-token:
+    required: false
 runs:
   using: composite
   steps:
@@ -32,10 +34,10 @@ runs:
         registry-url: https://registry.npmjs.org
 
     - id: npm
-      if: ${{ fromJson(inputs.config).npm && fromJson(inputs.config).npm.token }}
+      if: ${{ fromJson(inputs.config).npm }}
       uses: tarsilla-app/actions/publish/base/npm@main
       with:
-        token: ${{ fromJson(inputs.config).npm.token }}
+        token: ${{ inputs.npm-token }}
         install: ${{ fromJson(inputs.config).npm.install }}
         build: ${{ fromJson(inputs.config).npm.build }}
         publish: ${{ fromJson(inputs.config).npm.publish }}

@@ -5,6 +5,8 @@ inputs:
   node-version:
     required: false
     default: '22.x'
+  snyk-token:
+    required: false
 runs:
   using: composite
   steps:
@@ -36,11 +38,11 @@ runs:
       shell: bash
 
     - id: snyk-test
-      if: ${{ fromJson(inputs.config).snyk && fromJson(inputs.config).snyk.token && fromJson(inputs.config).snyk.types && contains(fromJson(inputs.config).snyk.types, 'test') }}
+      if: ${{ fromJson(inputs.config).snyk && inputs.snyk-token && contains(fromJson(inputs.config).snyk, 'test') }}
       uses: tarsilla-app/actions/code-analysis/base/snyk/test/node@main
       with:
         project: ${{ github.repository }}
-        token: ${{ fromJson(inputs.config).snyk.token }}
+        token: ${{ inputs.snyk-token }}
 
     - id: owasp
       if: ${{ fromJson(inputs.config).owasp }}
@@ -53,10 +55,10 @@ runs:
         suppression: ${{ fromJson(inputs.config).owasp.suppression || 'false' }}
 
     - id: snyk-code-test
-      if: ${{ fromJson(inputs.config).snyk && fromJson(inputs.config).snyk.token && fromJson(inputs.config).snyk.types && contains(fromJson(inputs.config).snyk.types, 'code-test') }}
+      if: ${{ fromJson(inputs.config).snyk && inputs.snyk-token && contains(fromJson(inputs.config).snyk, 'code-test') }}
       uses: tarsilla-app/actions/code-analysis/base/snyk/code-test/node@main
       with:
-        token: ${{ fromJson(inputs.config).snyk.token }}
+        token: ${{ inputs.snyk-token }}
 
     - id: codeql
       if: ${{ fromJson(inputs.config).codeql }}
