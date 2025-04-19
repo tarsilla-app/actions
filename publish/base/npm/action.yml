@@ -17,14 +17,6 @@ runs:
   #  id-token: write # to be set in workflow run
   using: composite
   steps:
-    - name: Echo
-      run: |
-        echo ${process.env.INSTALL}, ${process.env.BUILD}, ${process.env.PUBLISH}
-      shell: bash
-      env:
-        INSTALL: ${{ inputs.install }}
-        BUILD: ${{ inputs.build }}
-        PUBLISH: ${{ inputs.publish }}
     - name: Install
       shell: bash
       run: ${{ inputs.install }}
