@@ -19,14 +19,14 @@ runs:
       shell: bash
 
     - id: get-formula-file-name
-      run: node ./actions/publish/base/brew/get-formula-file-name.js
+      run: node ../publish/base/brew/get-formula-file-name.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
         TAP: ${{ inputs.tap }}
 
     - id: create-tag
-      run: node ./actions/publish/base/brew/create-tag.js
+      run: node ../publish/base/brew/create-tag.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
@@ -34,14 +34,14 @@ runs:
         BRANCH: ${{ github.ref_name }}
 
     - id: calculate-sha256
-      run: node ./actions/publish/base/brew/calculate-sha256.js
+      run: node ../publish/base/brew/calculate-sha256.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
         TAG_NAME: ${{ steps.create-tag.outputs.tagName }}
 
     - id: update-formula-file
-      run: node ./actions/publish/base/brew/update-formula-file.js
+      run: node ../publish/base/brew/update-formula-file.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
@@ -50,7 +50,7 @@ runs:
         SHA256: ${{ steps.calculate-sha256.outputs.sha256 }}
 
     - id: commit-formula-file
-      run: node ./actions/publish/base/brew/commit-formula-file.js
+      run: node ../publish/base/brew/commit-formula-file.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}

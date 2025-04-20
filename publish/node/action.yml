@@ -11,7 +11,7 @@ runs:
   using: composite
   steps:
     - name: Validate config
-      run: node ./actions/publish/base/brew/validate-config.js
+      run: node ./publish/base/brew/validate-config.js
       shell: bash
       env:
         CONFIG: ${{ inputs.config }}
