@@ -10,16 +10,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: validate-config
-      run: |
-        node -e "
-        try {
-          JSON.parse(process.env.CONFIG);
-        } catch (e) {
-          console.error('Invalid JSON in inputs.config:', process.env.CONFIG);
-          console.error('Error:', e.message);
-          process.exit(1);
-        }"
+    - name: Validate config
+      run: node validate-config.js
       shell: bash
       env:
         CONFIG: ${{ inputs.config }}

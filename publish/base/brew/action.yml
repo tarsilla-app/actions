@@ -1,0 +1,59 @@
+name: NodeJS Publish
+inputs:
+  tap:
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        registry-url: https://registry.npmjs.org
+    
+    - name: Install dependencies
+      run: npm install @octokit/rest conventional-commits-parser semver
+      shell: bash
+
+    - id: get-formula-file-name
+      run: node get-formula-file-name.js
+      shell: bash
+      env:
+        REPOSITORY: ${{ github.repository }}
+        TAP: ${{ inputs.tap }}
+
+    - id: create-tag
+      run: node create-tag.js
+      shell: bash
+      env:
+        REPOSITORY: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ github.token }}
+        BRANCH: ${{ github.ref_name }}
+
+    - id: calculate-sha256
+      run: node calculate-sha256.js
+      shell: bash
+      env:
+        REPOSITORY: ${{ github.repository }}
+        TAG_NAME: ${{ steps.create-tag.outputs.tagName }}
+
+    - id: update-formula-file
+      run: node update-formula-file.js
+      shell: bash
+      env:
+        REPOSITORY: ${{ github.repository }}
+        FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}
+        TAG_NAME: ${{ steps.create-tag.outputs.tagName }}
+        SHA256: ${{ steps.calculate-sha256.outputs.sha256 }}
+
+    - id: commit-formula-file
+      run: node commit-formula-file.js
+      shell: bash
+      env:
+        REPOSITORY: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ github.token }}
+        BRANCH: ${{ github.ref_name }}
+        FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}

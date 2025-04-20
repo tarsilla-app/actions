@@ -1,4 +1,4 @@
-name: NodeJS CI/CD
+name: NodeJS Code Analysis
 on:
   workflow_call:
     inputs:
