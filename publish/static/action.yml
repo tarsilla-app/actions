@@ -6,7 +6,7 @@ runs:
   using: composite
   steps:
     - name: Validate config
-      run: node validate-config.js
+      run: node ./actions/publish/static/validate-config.js
       shell: bash
       env:
         CONFIG: ${{ inputs.config }}
