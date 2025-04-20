@@ -1,7 +1,8 @@
 import { Octokit } from '@octokit/rest';
 import semver from 'semver';
-import { parseStream } from 'conventional-commits-parser';
-import { Readable } from 'stream';
+import {
+  CommitParser,
+} from 'conventional-commits-parser'
 
 const analyzerConfig = {
   preset: 'conventionalcommits',
@@ -27,16 +28,9 @@ const analyzerConfig = {
 };
 
 async function parseCommitMessage(commitMessage) {
-  const stream = Readable.from([commitMessage]); // Create a readable stream from the commit message
-  return new Promise((resolve, reject) => {
-    parseStream(stream, {}, (err, parsed) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(parsed);
-      }
-    });
-  });
+  const parser = new CommitParser(options)
+
+  return parser.parse(commitMessage);
 }
 
 async function createTag() {
