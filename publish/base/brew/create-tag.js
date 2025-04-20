@@ -1,6 +1,43 @@
 import { Octokit } from '@octokit/rest';
 import semver from 'semver';
-import { sync } from 'conventional-commits-parser';
+import { parseStream } from 'conventional-commits-parser';
+import { Readable } from 'stream';
+
+const analyzerConfig = {
+  preset: 'conventionalcommits',
+  parserOpts: {
+    headerPattern: /^(?<type>\w+)(?<exclamation1>!?)(?:\((?<scope>[^)]+)\)(?<exclamation2>!?))?: (?<subject>.+)$/,
+    headerCorrespondence: ['type', 'exclamation1', 'scope', 'exclamation2', 'subject'],
+  },
+  releaseRules: [
+    { type: 'feat', exclamation1: '!', release: 'major' },
+    { type: 'feat', exclamation2: '!', release: 'major' },
+    { type: 'feat', release: 'minor' },
+    { type: 'fix', release: 'patch' },
+    { type: 'docs', release: 'patch' },
+    { type: 'style', release: 'patch' },
+    { type: 'refactor', release: 'patch' },
+    { type: 'perf', release: 'patch' },
+    { type: 'test', release: 'patch' },
+    { type: 'build', release: 'patch' },
+    { type: 'ci', release: 'patch' },
+    { type: 'chore', release: 'patch' },
+    { type: 'revert', release: 'patch' },
+  ],
+};
+
+async function parseCommitMessage(commitMessage) {
+  const stream = Readable.from([commitMessage]); // Create a readable stream from the commit message
+  return new Promise((resolve, reject) => {
+    parseStream(stream, {}, (err, parsed) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(parsed);
+      }
+    });
+  });
+}
 
 async function createTag() {
   const token = process.env.GITHUB_TOKEN;
@@ -66,7 +103,7 @@ async function createTag() {
     // Analyze commits to determine the next version increment
     let releaseType = null;
     for (const commit of commits) {
-      const parsed = sync(commit.commit.message, analyzerConfig.parserOpts);
+      const parsed = await parseCommitMessage(commit.commit.message);
       const rule = analyzerConfig.releaseRules.find(
         (r) =>
           r.type === parsed.type &&
@@ -129,7 +166,7 @@ async function createTag() {
 
     return tagName;
   } catch (error) {
-    console.error(`Failed to create tag ${tagName}: ${error.message}`);
+    console.error(`Failed to create tag: ${error.message}`);
     throw error;
   }
 }
@@ -142,7 +179,10 @@ async function createTag() {
 
     console.log(`Tag created: ${tagName}`);
 
-    console.log(`::set-output name=tagName::${tagName}`);
+    const outputPath = process.env.GITHUB_OUTPUT;
+    if (outputPath) {
+      fs.appendFileSync(outputPath, `tagName=${tagName}\n`);
+    }
   } catch (error) {
     console.error('Error creating tag:', error);
     process.exit(1);
