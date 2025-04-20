@@ -10,8 +10,11 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Checkout code
+    - name: Checkout reusable action repository
       uses: actions/checkout@v4
+      with:
+        repository: tarsilla-app/actions
+        ref: main
 
     - name: Validate config
       run: node ./publish/base/brew/validate-config.js
