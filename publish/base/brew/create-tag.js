@@ -1,6 +1,6 @@
 const { Octokit } = require('@octokit/rest');
 const semver = require('semver');
-const conventionalCommitsParser = require('conventional-commits-parser');
+const conventionalCommitsParser = require('conventional-commits-parser').sync;
 
 async function createTag() {
   const token = process.env.GITHUB_TOKEN;

@@ -14,12 +14,6 @@ runs:
         repository: tarsilla-app/actions
         ref: main
         path: tarsilla-app-actions
-      
-    - name: Debug reusable action
-      run: |
-        echo "Current working directory: $(pwd)"
-        ls -R
-      shell: bash
 
     - name: Validate config
       run: node ./tarsilla-app-actions/publish/static/validate-config.js
