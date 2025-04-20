@@ -5,11 +5,15 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Checkout reusable action repository
       uses: actions/checkout@v4
       with:
         repository: tarsilla-app/actions
         ref: main
+        path: tarsilla-app-actions
       
     - name: Debug reusable action
       run: |
@@ -18,7 +22,7 @@ runs:
       shell: bash
 
     - name: Validate config
-      run: node ./publish/static/validate-config.js
+      run: node ./tarsilla-app-actions/publish/static/validate-config.js
       shell: bash
       env:
         CONFIG: ${{ inputs.config }}
