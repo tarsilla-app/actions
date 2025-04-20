@@ -75,7 +75,7 @@ async function createTag() {
 
       // Fetch commits since the last tag
       console.log(`Fetching commits since ${lastTag}...`);
-      const { data: commits } = await octokit.repos.listCommits({
+      const { data } = await octokit.repos.listCommits({
         owner,
         repo,
         sha: branchName,
