@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 function getFormulaFileName() {
   const repository = process.env.REPOSITORY;
   const tap = process.env.TAP;
@@ -19,7 +21,12 @@ function getFormulaFileName() {
 
     console.log(`Formula file name: ${formulaFileName}`);
 
-    console.log(`::set-output name=formulaFileName::${formulaFileName}`);
+    const outputPath = process.env.GITHUB_OUTPUT;
+    if (outputPath) {
+      fs.appendFileSync(outputPath, `formulaFileName=${formulaFileName}\n`);
+    }
+
+    //console.log(`::set-output name=formulaFileName::${formulaFileName}`);
   } catch (error) {
     console.error('Error getting formula file name:', error);
     process.exit(1);
