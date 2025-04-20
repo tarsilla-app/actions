@@ -1,6 +1,6 @@
-const { Octokit } = require('@octokit/rest');
-const semver = require('semver');
-const conventionalCommitsParser = require('conventional-commits-parser').sync;
+import { Octokit } from '@octokit/rest';
+import semver from 'semver';
+import { sync } from 'conventional-commits-parser';
 
 async function createTag() {
   const token = process.env.GITHUB_TOKEN;
@@ -66,7 +66,7 @@ async function createTag() {
     // Analyze commits to determine the next version increment
     let releaseType = null;
     for (const commit of commits) {
-      const parsed = conventionalCommitsParser.sync(commit.commit.message, analyzerConfig.parserOpts);
+      const parsed = sync(commit.commit.message, analyzerConfig.parserOpts);
       const rule = analyzerConfig.releaseRules.find(
         (r) =>
           r.type === parsed.type &&

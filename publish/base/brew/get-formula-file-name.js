@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 function getFormulaFileName() {
   const repository = process.env.REPOSITORY;

@@ -1,5 +1,5 @@
-const crypto = require('crypto');
-const fetch = require('node-fetch');
+import crypto from 'crypto';
+import fetch from 'node-fetch';
 
 async function calculateSha256() {
   const repository = process.env.REPOSITORY;
