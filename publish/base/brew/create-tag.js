@@ -66,10 +66,10 @@ async function createTag() {
       console.log(`Latest tag: ${lastTag}`);
   
       // Get the commit associated with the last tag
-      const { data: tagCommit } = await octokit.git.getTag({
+      const { data: tag } = await octokit.git.getTag({
         owner,
         repo,
-        tag_sha: tags[0].commit.sha,
+        tag_sha: tags[0].sha,
       });
   
       // Fetch commits since the last tag
@@ -78,7 +78,7 @@ async function createTag() {
         owner,
         repo,
         sha: branchName,
-        since: tagCommit.tagger.date, // Use the date of the last tag
+        since: tag.tagger.date, // Use the date of the last tag
       });
       commits = data;
     } else {
