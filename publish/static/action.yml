@@ -5,6 +5,9 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Checkout reusable action repository
+      uses: actions/checkout@v4
+      
     - name: Validate config
       run: node ./publish/static/validate-config.js
       shell: bash

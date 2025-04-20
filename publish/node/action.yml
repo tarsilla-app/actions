@@ -10,14 +10,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Checkout reusable action repository
+      uses: actions/checkout@v4
+
     - name: Validate config
       run: node ./publish/base/brew/validate-config.js
       shell: bash
       env:
         CONFIG: ${{ inputs.config }}
-
-    - name: Checkout code
-      uses: actions/checkout@v4
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
