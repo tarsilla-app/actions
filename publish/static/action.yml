@@ -5,9 +5,15 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Checkout reusable action repository
+    - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Debug reusable action
+      run: |
+        echo "Current working directory: $(pwd)"
+        ls -R
+      shell: bash
+
     - name: Validate config
       run: node ./publish/static/validate-config.js
       shell: bash
