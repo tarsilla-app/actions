@@ -5,7 +5,6 @@ import {
 } from 'conventional-commits-parser'
 
 const analyzerConfig = {
-  preset: 'conventionalcommits',
   parserOpts: {
     headerPattern: /^(?<type>\w+)(?<exclamation1>!?)(?:\((?<scope>[^)]+)\)(?<exclamation2>!?))?: (?<subject>.+)$/,
     headerCorrespondence: ['type', 'exclamation1', 'scope', 'exclamation2', 'subject'],
@@ -28,7 +27,7 @@ const analyzerConfig = {
 };
 
 async function parseCommitMessage(commitMessage) {
-  const parser = new CommitParser(options)
+  const parser = new CommitParser(analyzerConfig.parserOpts)
 
   return parser.parse(commitMessage);
 }
@@ -97,6 +96,7 @@ async function createTag() {
     }
 
     // Analyze commits to determine the next version increment
+    console.log(`Analyzing ${commits.length} commits`);
     let releaseType = null;
     for (const commit of commits) {
       const parsed = await parseCommitMessage(commit.commit.message);
