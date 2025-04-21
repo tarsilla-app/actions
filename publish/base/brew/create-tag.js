@@ -1,8 +1,7 @@
+import fs from 'fs';
+import { CommitParser } from 'conventional-commits-parser';
 import { Octokit } from '@octokit/rest';
 import semver from 'semver';
-import {
-  CommitParser,
-} from 'conventional-commits-parser'
 
 const analyzerConfig = {
   parserOpts: {
