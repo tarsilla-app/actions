@@ -15,31 +15,66 @@ runs:
       run: npm install @octokit/rest conventional-commits-parser semver
       shell: bash
 
+    - id: get-next-tag
+      run: node ./tarsilla-app-actions/publish/base/brew/get-next-tag.js
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        REPOSITORY: ${{ github.repository }}
+        BRANCH: ${{ github.ref_name }}
+
+    - id: set-git-user
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
+      run: node ./tarsilla-app-actions/publish/base/brew/set-git-user.js
+      shell: bash
+      env:
+        GIT_USER_EMAIL: ${{ github.actor }}@users.noreply.github.com
+        GIT_USER_NAME: ${{ github.actor }}
+
     - id: get-formula-file-name
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
       run: node ./tarsilla-app-actions/publish/base/brew/get-formula-file-name.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
         FORMULA_FILE: ${{ inputs.formula_file }}
 
-    - id: get-next-tag
-      run: node ./tarsilla-app-actions/publish/base/brew/get-next-tag.js
+    - id: create-stable-tarball
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
+      run: node ./tarsilla-app-actions/publish/base/brew/create-stable-tarball.js
+      shell: bash
+      env:
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
+
+    - id: calculate-sha256
+      if: ${{ steps.create-stable-tarball.outputs.stableTarball }}
+      run: node ./tarsilla-app-actions/publish/base/brew/calculate-sha256.js
+      shell: bash
+      env:
+        STABLE_TARBALL: ${{ steps.create-stable-tarball.outputs.stableTarball }}
+
+    - id: update-and-commit-formula-file
+      if: ${{ steps.calculate-sha256.outputs.sha256 }}
+      run: node ./tarsilla-app-actions/publish/base/brew/update-and-commit-formula-file.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
-        GITHUB_TOKEN: ${{ github.token }}
+        FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
+        SHA256: ${{ steps.calculate-sha256.outputs.sha256 }}
         BRANCH: ${{ github.ref_name }}
 
-    - id: set-git-user
-      run: node ./tarsilla-app-actions/publish/base/brew/set-git-user.js
+    - id: create-tag
+      run: node ./tarsilla-app-actions/publish/base/brew/create-tag.js
       shell: bash
       env:
-        GIT_USER_EMAIL: ${{ github.actor }}@users.noreply.github.com
-        GIT_USER_NAME: ${{ github.actor }}
-        
-    - id: push-all
-      if: ${{ steps.get-next-tag.outputs.nextTag }}
-      run: node ./tarsilla-app-actions/publish/base/brew/push-all.js
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
+
+    - id: create-release
+      run: node ./tarsilla-app-actions/publish/base/brew/create-release.js
       shell: bash
       env:
-        BRANCH: ${{ github.ref_name }}
+        GITHUB_TOKEN: ${{ github.token }}
+        REPOSITORY: ${{ github.repository }}
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
+        STABLE_TARBALL: ${{ steps.create-stable-tarball.outputs.stableTarball }}

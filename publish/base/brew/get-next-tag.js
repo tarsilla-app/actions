@@ -43,10 +43,7 @@ async function getNextTag() {
   }
 
   const [owner, repo] = repository.split('/');
-
-  const octokit = new Octokit({
-    auth: token,
-  });
+  const octokit = new Octokit({ auth: token });
 
   console.log(`Fetching list of tags...`);
   const { data: tags } = await octokit.repos.listTags({
@@ -116,7 +113,8 @@ async function getNextTag() {
     return null;
   }
 
-  const nextVersion = semver.inc(lastTag.replace(/^v/, ''), releaseType);
+  const lastVersion = lastTag.replace(/^v/, '');
+  const nextVersion = semver.inc(lastVersion, releaseType);
   const nextTag = `v${nextVersion}`;
 
   return nextTag;

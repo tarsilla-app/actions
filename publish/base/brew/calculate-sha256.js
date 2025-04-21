@@ -3,18 +3,18 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 
 function calculateSha256() {
-  const nextTag = process.env.NEXT_TAG;
-  const tempTarGzPath = './temp.tar.gz';
+  const stableTarball = process.env.STABLE_TARBALL;
 
-  if (!nextTag) {
-    throw new Error('NEXT_TAG is not set in the environment.');
+  if (!stableTarball) {
+    throw new Error('STABLE_TARBALL is not set in the environment.');
   }
 
-  console.log(`Generating tar.gz archive for tag ${nextTag}...`);
-  execSync(`git archive --format=tar.gz --prefix=${nextTag}/ ${nextTag} > ${tempTarGzPath}`);
+  const stableTarballPath = `./${stableTarball}`;
+  if (!fs.existsSync(stableTarballPath)) {
+    throw new Error(`Tarball file ${stableTarball} does not exist.`);
+  }
 
-  console.log(`Calculating SHA256 checksum for ${tempTarGzPath}...`);
-  const fileBuffer = fs.readFileSync(tempTarGzPath);
+  const fileBuffer = fs.readFileSync(stableTarballPath);
   const hash = crypto.createHash('sha256');
   hash.update(fileBuffer);
   return hash.digest('hex');
