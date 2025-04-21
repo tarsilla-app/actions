@@ -2,7 +2,6 @@ import fs from 'fs';
 import { CommitParser } from 'conventional-commits-parser';
 import { Octokit } from '@octokit/rest';
 import semver from 'semver';
-import { execSync } from 'child_process';
 
 const analyzerConfig = {
   parserOpts: {
