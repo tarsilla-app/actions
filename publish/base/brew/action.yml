@@ -62,6 +62,7 @@ runs:
         FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}
         NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
         SHA256: ${{ steps.calculate-sha256.outputs.sha256 }}
+        STABLE_TARBALL: ${{ steps.create-stable-tarball.outputs.stableTarball }}
         BRANCH: ${{ github.ref_name }}
 
     - id: create-tag

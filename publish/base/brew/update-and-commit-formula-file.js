@@ -6,6 +6,7 @@ async function updateFormulaFileUrl() {
   const formulaFile = process.env.FORMULA_FILE_NAME;
   const nextTag = process.env.NEXT_TAG;
   const sha256 = process.env.SHA256;
+  const stableTarball = process.env.STABLE_TARBALL;
   const branchName = process.env.BRANCH ?? 'main';
 
   if (!repository) {
@@ -18,7 +19,7 @@ async function updateFormulaFileUrl() {
     throw new Error('SHA256 is not set in the environment.');
   }
   
-  const tarUrl = `https://codeload.github.com/${repository}/tar.gz/refs/tags/${nextTag}`;
+  const tarUrl = `https://github.com/${repository}/releases/download/${nextTag}/${stableTarball}`;
   
   if (!fs.existsSync(formulaFile)) {
     throw new Error(`Formula file not found: ${formulaFile}`);
