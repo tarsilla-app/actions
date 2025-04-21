@@ -3,15 +3,15 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 
 function calculateSha256() {
-  const tagName = process.env.NEXT_TAG;
+  const nextTag = process.env.NEXT_TAG;
   const tempTarGzPath = './temp.tar.gz';
 
-  if (!tagName) {
+  if (!nextTag) {
     throw new Error('NEXT_TAG is not set in the environment.');
   }
 
-  console.log(`Generating tar.gz archive for tag ${tagName}...`);
-  execSync(`git archive --format=tar.gz --prefix=${tagName}/ ${tagName} > ${tempTarGzPath}`);
+  console.log(`Generating tar.gz archive for tag ${nextTag}...`);
+  execSync(`git archive --format=tar.gz --prefix=${nextTag}/ ${nextTag} > ${tempTarGzPath}`);
 
   console.log(`Calculating SHA256 checksum for ${tempTarGzPath}...`);
   const fileBuffer = fs.readFileSync(tempTarGzPath);

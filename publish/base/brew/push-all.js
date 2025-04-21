@@ -2,14 +2,8 @@ import { execSync } from 'child_process';
 
 function pushAll() {
   const branchName = process.env.BRANCH ?? 'main';
-  const nextTag = process.env.NEXT_TAG;
 
-  execSync(`git tag -d ${nextTag}`);
-  execSync(`git tag -a ${nextTag} -m "Release ${nextTag}"`);
-
-  execSync(`git push origin ${branchName} --follow-tags`);
-  //execSync(`git push origin ${branchName}  --force`);
-  //execSync(`git push origin ${tagName} --force`);
+  execSync(`git push origin ${branchName}`);
 }
 
 (() => {
