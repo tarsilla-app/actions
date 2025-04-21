@@ -1,5 +1,4 @@
-import crypto from 'crypto';
-import fs from 'fs';
+import { execSync } from 'child_process';
 
 async function setGitUser() {
   const name = process.env.GIT_USER_NAME;
@@ -19,12 +18,7 @@ async function setGitUser() {
   try {
     console.log('Setting git user...');
 
-    const sha256 = await setGitUser();
-    
-    const outputPath = process.env.GITHUB_OUTPUT;
-    if (outputPath) {
-      fs.appendFileSync(outputPath, `sha256=${sha256}\n`);
-    }
+    await setGitUser();
 
     console.log(`Git user set: ${sha256}`);
   } catch (error) {

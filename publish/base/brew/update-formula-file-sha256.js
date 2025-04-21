@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { execSync } from 'child_process';
 
 async function updateFormulaFileSha256() {
   const formulaFile = process.env.FORMULA_FILE_NAME;
