@@ -5,8 +5,9 @@ async function commitFormulaFile() {
   const token = process.env.GITHUB_TOKEN;
   const repository = process.env.REPOSITORY;
   const formulaFile = process.env.FORMULA_FILE_NAME;
+  const tagName = process.env.TAG_NAME;
   const branchName = process.env.BRANCH ?? 'main';
-
+  
   if (!token) {
     throw new Error('GITHUB_TOKEN is not set in the environment.');
   } else if (!repository) {
@@ -68,7 +69,7 @@ async function commitFormulaFile() {
     console.log(`Created new tree with SHA: ${newTree.sha}`);
 
     // Create a new commit with the updated tree
-    const commitMessage = `chore(release): ${nextRelease.version}`;
+    const commitMessage = `chore(release): ${tagName}`;
     const { data: newCommit } = await octokit.git.createCommit({
       owner,
       repo,
