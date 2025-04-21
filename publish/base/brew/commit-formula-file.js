@@ -97,7 +97,7 @@ async function commitFormulaFile() {
   try {
     console.log('Committing formula file...');
 
-    await createTag();
+    await commitFormulaFile();
 
     console.log('Formula file committed...');
   } catch (error) {

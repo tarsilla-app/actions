@@ -18,7 +18,6 @@ async function updateFormulaFile() {
   
   const tarUrl = `https://codeload.github.com/${repository}/tar.gz/refs/tags/${tagName}`;
   
-  console.log('Current working directory:', process.cwd());
   if (!fs.existsSync(formulaFile)) {
     throw new Error(`Formula file not found: ${formulaFile}`);
   }
