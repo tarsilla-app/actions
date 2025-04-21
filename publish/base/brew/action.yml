@@ -73,3 +73,6 @@ runs:
       if: ${{ steps.get-next-tag.outputs.nextTag }}
       run: node ./tarsilla-app-actions/publish/base/brew/push-all.js
       shell: bash
+      env:
+        BRANCH: ${{ github.ref_name }}
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
