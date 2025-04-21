@@ -25,4 +25,4 @@ runs:
       if: ${{ fromJson(inputs.config).brew }}
       uses: tarsilla-app/actions/publish/base/brew@main
       with:
-        tap: ${{ fromJson(inputs.config).brew.tap }}
+        formula_file: ${{ fromJson(inputs.config).brew.formula_file }}

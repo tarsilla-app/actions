@@ -30,6 +30,13 @@ runs:
         GITHUB_TOKEN: ${{ github.token }}
         BRANCH: ${{ github.ref_name }}
 
+    - id: set-git-user
+      run: node ./tarsilla-app-actions/publish/base/brew/set-git-user.js
+      shell: bash
+      env:
+        GIT_USER_EMAIL: ${{ github.actor }}@users.noreply.github.com
+        GIT_USER_NAME: ${{ github.actor }}
+
     - id: update-formula-file-url
       if: ${{ steps.get-next-tag.outputs.nextTag }}
       run: node ./tarsilla-app-actions/publish/base/brew/update-formula-file-url.js
