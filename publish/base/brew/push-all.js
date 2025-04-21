@@ -3,9 +3,10 @@ import { execSync } from 'child_process';
 function pushAll() {
   const branchName = process.env.BRANCH ?? 'main';
 
-  // Push the commit and the tag to the remote repository
-  console.log('Pushing the commit and the tag...');
-  execSync(`git push origin ${branchName} --follow-tags`);
+  //execSync(`git push origin ${branchName} --follow-tags`);
+  execSync(`git push origin ${branchName} --force-with-lease`);
+  execSync(`git push origin ${tagName} --force`);
+
 }
 
 (() => {
