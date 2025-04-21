@@ -19,14 +19,12 @@ function getFormulaFileName() {
 
     const formulaFileName = getFormulaFileName();
 
-    console.log(`Formula file name: ${formulaFileName}`);
-
     const outputPath = process.env.GITHUB_OUTPUT;
     if (outputPath) {
       fs.appendFileSync(outputPath, `formulaFileName=${formulaFileName}\n`);
     }
 
-    //console.log(`::set-output name=formulaFileName::${formulaFileName}`);
+    console.log(`Formula file name: ${formulaFileName}`);
   } catch (error) {
     console.error('Error getting formula file name:', error);
     process.exit(1);

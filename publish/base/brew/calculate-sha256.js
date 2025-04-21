@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import fetch from 'node-fetch';
+import fs from 'fs';
 
 async function calculateSha256() {
   const repository = process.env.REPOSITORY;
@@ -50,10 +50,13 @@ async function calculateSha256() {
     console.log('Calculating sha256...');
 
     const sha256 = await calculateSha256();
+    
+    const outputPath = process.env.GITHUB_OUTPUT;
+    if (outputPath) {
+      fs.appendFileSync(outputPath, `sha256=${sha256}\n`);
+    }
 
     console.log(`SHA256 calculated: ${sha256}`);
-
-    console.log(`::set-output name=sha256::${sha256}`);
   } catch (error) {
     console.error('Error calculating sha256:', error);
     process.exit(1);

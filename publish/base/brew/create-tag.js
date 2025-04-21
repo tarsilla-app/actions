@@ -172,12 +172,12 @@ async function createTag() {
 
     const tagName = await createTag();
 
-    console.log(`Tag created: ${tagName}`);
-
     const outputPath = process.env.GITHUB_OUTPUT;
     if (outputPath) {
       fs.appendFileSync(outputPath, `tagName=${tagName}\n`);
     }
+
+    console.log(`Tag created: ${tagName}`);
   } catch (error) {
     console.error('Error creating tag:', error);
     process.exit(1);
