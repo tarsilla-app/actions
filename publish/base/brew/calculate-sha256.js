@@ -3,12 +3,12 @@ import fs from 'fs';
 
 async function calculateSha256() {
   const repository = process.env.REPOSITORY;
-  const tagName = process.env.TAG_NAME;
+  const tagName = process.env.NEXT_TAG;
 
   if (!repository) {
     throw new Error('REPOSITORY is not set in the environment.');
   } else  if (!tagName) {
-    throw new Error('TAG_NAME is not set in the environment.');
+    throw new Error('NEXT_TAG is not set in the environment.');
   }
   
   const tarUrl = `https://codeload.github.com/${repository}/tar.gz/refs/tags/${tagName}`;

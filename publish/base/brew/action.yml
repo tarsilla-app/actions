@@ -1,6 +1,6 @@
 name: NodeJS Publish
 inputs:
-  tap:
+  formula_file:
     required: false
 runs:
   using: composite
@@ -20,38 +20,49 @@ runs:
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
-        TAP: ${{ inputs.tap }}
+        FORMULA_FILE: ${{ inputs.formula_file }}
 
-    - id: create-tag
-      run: node ./tarsilla-app-actions/publish/base/brew/create-tag.js
+    - id: get-next-tag
+      run: node ./tarsilla-app-actions/publish/base/brew/get-next-tag.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
         GITHUB_TOKEN: ${{ github.token }}
         BRANCH: ${{ github.ref_name }}
 
+    - id: update-formula-file-url
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
+      run: node ./tarsilla-app-actions/publish/base/brew/update-formula-file-url.js
+      shell: bash
+      env:
+        REPOSITORY: ${{ github.repository }}
+        FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
+
+    - id: create-tag
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
+      run: node ./tarsilla-app-actions/publish/base/brew/create-tag.js
+      shell: bash
+      env:
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
+
     - id: calculate-sha256
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
       run: node ./tarsilla-app-actions/publish/base/brew/calculate-sha256.js
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
-        TAG_NAME: ${{ steps.create-tag.outputs.tagName }}
+        NEXT_TAG: ${{ steps.get-next-tag.outputs.nextTag }}
 
-    - id: update-formula-file
-      run: node ./tarsilla-app-actions/publish/base/brew/update-formula-file.js
+    - id: update-formula-file-sha256
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
+      run: node ./tarsilla-app-actions/publish/base/brew/update-formula-file-sha256.js
       shell: bash
       env:
-        REPOSITORY: ${{ github.repository }}
         FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}
-        TAG_NAME: ${{ steps.create-tag.outputs.tagName }}
         SHA256: ${{ steps.calculate-sha256.outputs.sha256 }}
 
-    - id: commit-formula-file
-      run: node ./tarsilla-app-actions/publish/base/brew/commit-formula-file.js
+    - id: push-all
+      if: ${{ steps.get-next-tag.outputs.nextTag }}
+      run: node ./tarsilla-app-actions/publish/base/brew/push-all.js
       shell: bash
-      env:
-        REPOSITORY: ${{ github.repository }}
-        GITHUB_TOKEN: ${{ github.token }}
-        BRANCH: ${{ github.ref_name }}
-        FORMULA_FILE_NAME: ${{ steps.get-formula-file-name.outputs.formulaFileName }}
-        TAG_NAME: ${{ steps.create-tag.outputs.tagName }}

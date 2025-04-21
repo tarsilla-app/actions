@@ -2,7 +2,7 @@ import fs from 'fs';
 
 function getFormulaFileName() {
   const repository = process.env.REPOSITORY;
-  const tap = process.env.TAP;
+  const formulaFile = process.env.FORMULA_FILE;
 
   if (!repository) {
     throw new Error('REPOSITORY is not set in the environment.');
@@ -10,7 +10,7 @@ function getFormulaFileName() {
 
   const project = repository.split('/').pop();
 
-  return tap || `${project}.rb`;
+  return formulaFile || `${project}.rb`;
 }
 
 (() => {
