@@ -20,7 +20,7 @@ async function setGitUser() {
 
     await setGitUser();
 
-    console.log(`Git user set: ${sha256}`);
+    console.log(`Git user set`);
   } catch (error) {
     console.error('Error setting git user:', error);
     process.exit(1);
