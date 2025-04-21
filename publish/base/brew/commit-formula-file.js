@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Octokit } from '@octokit/rest';
 
 async function commitFormulaFile() {
