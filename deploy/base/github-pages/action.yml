@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: ${{ inputs.build }}
     - name: Upload files
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v4
       with: 
         path: ${{ inputs.path }}
     - id: deploy

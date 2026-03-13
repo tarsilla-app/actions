@@ -10,10 +10,10 @@ runs:
   using: composite
   steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Checkout reusable action repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: tarsilla-app/actions
         ref: main
@@ -26,7 +26,7 @@ runs:
         CONFIG: ${{ inputs.config }}
 
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
         registry-url: https://registry.npmjs.org

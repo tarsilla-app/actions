@@ -14,12 +14,12 @@ runs:
   using: composite
   steps:
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ inputs.languages }}
         build-mode: ${{ inputs.build-mode }}
     - name: Run CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: /language:${{ inputs.languages }}
         output: ${{ github.workspace }}/${{ inputs.out }}/codeql-results.sarif
