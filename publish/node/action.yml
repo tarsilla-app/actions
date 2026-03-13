@@ -1,4 +1,5 @@
 name: NodeJS Publish
+description: Publish a new release to NPM when a new tag is created on the repository.
 inputs:
   config:
     required: true
@@ -21,7 +22,7 @@ runs:
         path: tarsilla-app-actions
 
     - name: Validate config
-      run: node ./tarsilla-app-actions/publish/node/validate-config.js
+      run: node ./tarsilla-app-actions/publish/validate-config.js
       shell: bash
       env:
         CONFIG: ${{ inputs.config }}

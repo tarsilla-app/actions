@@ -1,4 +1,5 @@
 name: NodeJS Deploy
+description: Deploys a NodeJS application, currently supporting Storybook deployment to GitHub Pages.
 inputs:
   config:
     required: true

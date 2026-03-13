@@ -1,4 +1,5 @@
 name: OWASP Dependency-Check
+description: Analyzes project dependencies for known vulnerabilities using OWASP Dependency-Check.
 inputs:
   project:
     required: true

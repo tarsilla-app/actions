@@ -1,4 +1,5 @@
 name: Snyk Code Test
+description: Analyzes code for vulnerabilities using Snyk Code Test, supporting NodeJS projects.
 inputs:
   token:
     required: true

@@ -1,4 +1,5 @@
 name: NodeJS Publish
+description: Publish a new release for Homebrew when a new tag is created on the repository.
 inputs:
   formula_file:
     required: false

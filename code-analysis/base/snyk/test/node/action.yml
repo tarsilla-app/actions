@@ -1,4 +1,5 @@
 name: Snyk Test
+description: Analyzes project dependencies for known vulnerabilities using Snyk Test, supporting NodeJS projects.
 inputs:
   project:
     required: true

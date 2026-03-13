@@ -1,4 +1,5 @@
 name: Deploy Storybook
+description: Deploys Storybook to a specified host, currently supporting GitHub Pages.
 inputs:
   host:
     required: true

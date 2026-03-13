@@ -1,4 +1,5 @@
 name: CodeQL Analyze
+description: Analyzes code using CodeQL, supporting multiple languages and build modes.
 inputs:
   languages:
     required: true
