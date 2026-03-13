@@ -1,10 +1,11 @@
 name: NodeJS Code Analysis
+description: A GitHub Action for performing code analysis on Node.js projects using Snyk, OWASP Dependency Check, and CodeQL.
 inputs:
   config:
     required: true
   node-version:
     required: false
-    default: '22.x'
+    default: '25.x'
   snyk-token:
     required: false
 runs:

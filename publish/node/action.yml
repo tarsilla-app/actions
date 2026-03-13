@@ -5,7 +5,7 @@ inputs:
     required: true
   node-version:
     required: false
-    default: '22.x'
+    default: '25.x'
   npm-token:
     required: false
 runs:
