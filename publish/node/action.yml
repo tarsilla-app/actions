@@ -6,8 +6,6 @@ inputs:
   node-version:
     required: false
     default: '25.x'
-  npm-token:
-    required: false
 runs:
   using: composite
   steps:
@@ -37,7 +35,6 @@ runs:
       if: ${{ fromJson(inputs.config).npm }}
       uses: tarsilla-app/actions/publish/base/npm@main
       with:
-        token: ${{ inputs.npm-token }}
         install: ${{ fromJson(inputs.config).npm.install || 'npm ci' }}
         build: ${{ fromJson(inputs.config).npm.build || 'npm run build' }}
         publish: ${{ fromJson(inputs.config).npm.publish || 'npx semantic-release' }}

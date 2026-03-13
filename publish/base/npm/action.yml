@@ -1,8 +1,6 @@
 name: NPM Publish
 description: Publish a new release to NPM when a new tag is created on the repository.
 inputs:
-  token:
-    required: true
   install:
     required: false
     default: npm ci
@@ -31,4 +29,3 @@ runs:
       run: ${{ inputs.publish }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
-        NPM_TOKEN: ${{ inputs.token }}
