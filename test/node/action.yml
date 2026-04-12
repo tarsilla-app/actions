@@ -12,19 +12,6 @@ runs:
     - name: Checkout code
       uses: actions/checkout@v6
 
-    - name: Checkout reusable action repository
-      uses: actions/checkout@v6
-      with:
-        repository: tarsilla-app/actions
-        ref: main
-        path: tarsilla-app-actions
-
-    - name: Validate config
-      run: node ./tarsilla-app-actions/test/validate-config.js
-      shell: bash
-      env:
-        CONFIG: ${{ inputs.config }}
-
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:

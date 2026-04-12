@@ -13,7 +13,24 @@ on:
       snyk-token:
         required: false
 jobs:
+  check-code-analysis-config:
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.check-config.outputs.exists }}
+    steps:
+      - name: Check config existence
+        id: check-config
+        run: |
+          if [ -z "${{ inputs.config }}" ]; then
+            echo "Config not provided. Skipping node code analysis."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
   validate-code-analysis-config:
+    needs: [check-code-analysis-config]
+    if: ${{ needs.check-code-analysis-config.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate Config

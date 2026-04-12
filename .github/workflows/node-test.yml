@@ -1,0 +1,54 @@
+name: NodeJS Test
+on:
+  workflow_call:
+    inputs:
+      config:
+        required: false
+        type: string
+      node-version:
+        required: false
+        type: string
+        default: '25.x'
+jobs:
+  check-code-analysis-config:
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.check-config.outputs.exists }}
+    steps:
+      - name: Check config existence
+        id: check-config
+        run: |
+          if [ -z "${{ inputs.config }}" ]; then
+            echo "Config not provided. Skipping node test."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+  validate-code-analysis-config:
+    needs: [check-code-analysis-config]
+    if: ${{ needs.check-code-analysis-config.outputs.exists == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Config
+        run: |
+          node -e "
+          try {
+            JSON.parse(process.env.CONFIG);
+          } catch (e) {
+            console.error('Invalid JSON in inputs.config:', process.env.CONFIG);
+            console.error('Error:', e.message);
+            process.exit(1);
+          }"
+        shell: bash
+        env:
+          CONFIG: ${{ inputs.config }}
+  test:
+    runs-on: ubuntu-latest
+    needs: [validate-code-analysis-config]
+    steps:
+      - name: Run Test
+        uses: tarsilla-app/actions/test/node@main
+        with:
+          config: ${{ inputs.config }}
+          node-version: ${{ inputs.node-version }}
