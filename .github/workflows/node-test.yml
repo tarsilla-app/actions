@@ -10,7 +10,7 @@ on:
         type: string
         default: '25.x'
 jobs:
-  check-code-analysis-config:
+  check-test-config:
     runs-on: ubuntu-latest
     outputs:
       exists: ${{ steps.check-config.outputs.exists }}
@@ -25,9 +25,9 @@ jobs:
             echo "exists=true" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
-  validate-code-analysis-config:
-    needs: [check-code-analysis-config]
-    if: ${{ needs.check-code-analysis-config.outputs.exists == 'true' }}
+  validate-test-config:
+    needs: [check-test-config]
+    if: ${{ needs.check-test-config.outputs.exists == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate Config
@@ -45,7 +45,7 @@ jobs:
           CONFIG: ${{ inputs.config }}
   test:
     runs-on: ubuntu-latest
-    needs: [validate-code-analysis-config]
+    needs: [validate-test-config]
     steps:
       - name: Run Test
         uses: tarsilla-app/actions/test/node@main
