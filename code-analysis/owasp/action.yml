@@ -16,7 +16,7 @@ runs:
   using: composite
   steps:
     - name: Run OWASP Dependency-Check
-      uses: tarsilla-app/actions/code-analysis/base/owasp/owasp@main
+      uses: tarsilla-app/actions/code-analysis/owasp/owasp@main
       with:
         project: ${{ inputs.project }}
         path: ${{ inputs.path }}

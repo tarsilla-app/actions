@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run Snyk Test
-        uses: tarsilla-app/actions/code-analysis/base/snyk/test/node@main
+        uses: tarsilla-app/actions/code-analysis/snyk/test/node@main
         with:
           project: ${{ github.repository }}
           token: ${{ secrets.snyk-token }}
@@ -69,7 +69,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run OWASP Test
-        uses: tarsilla-app/actions/code-analysis/base/owasp@main
+        uses: tarsilla-app/actions/code-analysis/owasp@main
         with:
           project: ${{ github.repository }}
           path: .
@@ -97,7 +97,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run Snyk Code Test
-        uses: tarsilla-app/actions/code-analysis/base/snyk/code-test/node@main
+        uses: tarsilla-app/actions/code-analysis/snyk/code-test/node@main
         with:
           token: ${{ secrets.snyk-token }}
   codeql:
@@ -115,7 +115,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run Codeql
-        uses: tarsilla-app/actions/code-analysis/base/codeql@main
+        uses: tarsilla-app/actions/code-analysis/codeql@main
         with:
           languages: javascript-typescript
           build-mode: none
