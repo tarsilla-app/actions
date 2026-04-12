@@ -1,0 +1,40 @@
+name: NodeJS Publish
+description: Publish a new release to NPM when a new tag is created on the repository.
+inputs:
+  config:
+    required: true
+  node-version:
+    required: false
+    default: '25.x'
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Checkout reusable action repository
+      uses: actions/checkout@v6
+      with:
+        repository: tarsilla-app/actions
+        ref: main
+        path: tarsilla-app-actions
+
+    - name: Validate config
+      run: node ./tarsilla-app-actions/test/validate-config.js
+      shell: bash
+      env:
+        CONFIG: ${{ inputs.config }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: https://registry.npmjs.org
+
+    - name: Install
+      shell: bash
+      run: ${{ fromJson(inputs.config).install || 'npm ci' }}
+
+    - name: Test
+      shell: bash
+      run: ${{ fromJson(inputs.config).test || 'npm run test' }}
