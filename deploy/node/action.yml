@@ -1,5 +1,5 @@
 name: NodeJS Deploy
-description: Deploys a NodeJS application, currently supporting Storybook deployment to GitHub Pages.
+description: Deploys a NodeJS application, currently supporting Storybook and Vite deployment to GitHub Pages.
 inputs:
   config:
     required: true
@@ -8,18 +8,24 @@ inputs:
     default: '25.x'
 outputs:
   github_pages_url:
-    value: ${{ steps.storybook.outputs.github_pages_url }}
+    value: ${{ steps.github-pages.outputs.github_pages_url }}
 runs:
   using: composite
   steps:
     - id: validate-config
       run: |
         node -e "
+        let config;
         try {
-          JSON.parse(process.env.CONFIG);
+          config = JSON.parse(process.env.CONFIG);
         } catch (e) {
           console.error('Invalid JSON in inputs.config:', process.env.CONFIG);
           console.error('Error:', e.message);
+          process.exit(1);
+        }
+        const hosts = ['github-pages'].filter((h) => config[h] && config[h].type);
+        if (hosts.length > 1) {
+          console.error('Only one deploy host may be configured, but found:', hosts.join(', '));
           process.exit(1);
         }"
       shell: bash
@@ -35,11 +41,11 @@ runs:
         node-version: ${{ inputs.node-version }}
         registry-url: https://registry.npmjs.org
 
-    - id: storybook
-      if: ${{ fromJson(inputs.config).storybook && fromJson(inputs.config).storybook.host }}
-      uses: tarsilla-app/actions/deploy/node/storybook@main
+    - id: github-pages
+      if: ${{ fromJson(inputs.config)['github-pages'] && fromJson(inputs.config)['github-pages'].type }}
+      uses: tarsilla-app/actions/deploy/node/github-pages@main
       with:
-        host: ${{ fromJson(inputs.config).storybook.host }}
-        install: ${{ fromJson(inputs.config).storybook.install || 'npm ci' }}
-        build: ${{ fromJson(inputs.config).storybook.build || 'npm run build-storybook' }}
-        path: ${{ fromJson(inputs.config).storybook.path || 'storybook-static' }}
+        type: ${{ fromJson(inputs.config)['github-pages'].type }}
+        install: ${{ fromJson(inputs.config)['github-pages'].install }}
+        build: ${{ fromJson(inputs.config)['github-pages'].build }}
+        path: ${{ fromJson(inputs.config)['github-pages'].path }}

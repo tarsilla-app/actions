@@ -1,0 +1,34 @@
+name: Deploy to Github Pages
+description: Deploys a NodeJS build (Storybook or Vite) to GitHub Pages.
+inputs:
+  type:
+    required: true
+  install:
+    required: false
+  build:
+    required: false
+  path:
+    required: false
+outputs:
+  github_pages_url:
+    value: ${{ steps.storybook.outputs.github_pages_url || steps.vite.outputs.github_pages_url }}
+runs:
+  using: composite
+  steps:
+    - id: storybook
+      if: ${{ inputs.type == 'storybook' }}
+      name: Deploy Storybook to Github Pages
+      uses: tarsilla-app/actions/deploy/base/github-pages@main
+      with:
+        install: ${{ inputs.install || 'npm ci' }}
+        build: ${{ inputs.build || 'npm run build-storybook' }}
+        path: ${{ inputs.path || 'storybook-static' }}
+
+    - id: vite
+      if: ${{ inputs.type == 'vite' }}
+      name: Deploy Vite to Github Pages
+      uses: tarsilla-app/actions/deploy/base/github-pages@main
+      with:
+        install: ${{ inputs.install || 'npm ci' }}
+        build: ${{ inputs.build || 'npm run build' }}
+        path: ${{ inputs.path || 'dist' }}
