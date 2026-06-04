@@ -5,7 +5,7 @@ inputs:
     required: true
   node-version:
     required: false
-    default: '25.x'
+    default: '26.x'
 outputs:
   github_pages_url:
     value: ${{ steps.github-pages.outputs.github_pages_url }}
